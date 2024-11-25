@@ -11,7 +11,7 @@ public class Test {
 		String about=HtmlRender.readHtml("D://about.xhtml");
 		
 		HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_ARGB);
-		
+		htmlRender.addFontDirectory("D:/myfonts");
 		
 		htmlRender.toPng(about, "D://test.png");
 		
