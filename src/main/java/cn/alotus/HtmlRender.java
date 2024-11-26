@@ -28,6 +28,7 @@ import com.openhtmltopdf.util.XRLog;
 
 import cn.alotus.config.BuilderConfig;
 import cn.alotus.config.BuilderConfig.BaseBuilderConfig;
+import cn.alotus.config.BuilderConfig.PdfBuilderConfig;
 import cn.alotus.core.io.file.FileNameUtil;
 import cn.alotus.processor.BufferedImagePageProcessor;
 
@@ -152,34 +153,50 @@ public class HtmlRender {
 
 	}
 
+ 
 	/**
 	 * toPdf
 	 * 		OutputStream outputStream = new ByteArrayOutputStream(4096)
-	 * @param html   html
+	 * @param html html
+	 * @param outputStream outputStream
 	 * @param config config
-	 * @return BufferedImage
 	 * @throws IOException
 	 */
-	public void toPdf(String html,OutputStream outputStream, BaseBuilderConfig... config) throws IOException {
+	public void toPdf(String html,OutputStream outputStream, PdfBuilderConfig... config) throws IOException {
+		
+		toPdf((builder)->{
+			builder.withHtmlContent(html, "");
+			//builder.useDefaultPageSize(pageWidth, pageHeight, units);
+			builder.toStream(outputStream);
+		},(builder)->{
+			// 配置
+			for (PdfBuilderConfig baseBuilderConfig : config) {
+				baseBuilderConfig.configure(builder);
+			}
+		});
+
+	}
+
+	/**
+	 * toPdf
+	 * @param config config
+	 * @throws IOException
+	 */
+	public void toPdf(PdfBuilderConfig... config) throws IOException {
 		
 		XRLog.setLoggingEnabled(loggingEnabled);
 
 		PdfRendererBuilder builder = new PdfRendererBuilder();
-
-		builder.withHtmlContent(html, "");
-		builder.useDefaultPageSize(pageWidth, pageHeight, units);
-		builder.useFastMode();
 
 		// pdf
 		BuilderConfig.WITH_PDF.configure(builder);
 		// 字体
 		WITH_FOOTS.configure(builder);
 		// 配置
-		for (BaseBuilderConfig baseBuilderConfig : config) {
-			baseBuilderConfig.configure(builder);
+		for (PdfBuilderConfig builderConfig : config) {
+			builderConfig.configure(builder);
 		}
-
-		builder.toStream(outputStream);
+		
 		builder.run();
 
 	}

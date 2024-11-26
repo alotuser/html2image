@@ -92,7 +92,11 @@
 		    <artifactId>astool</artifactId>
 		    <version>1.0.1</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.jfree</groupId>
+		    <artifactId>jfreechart</artifactId>
+		    <version>1.5.5</version>
+		</dependency>
 
 	</dependencies>
 

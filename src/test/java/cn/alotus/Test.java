@@ -1,6 +1,7 @@
 package cn.alotus;
 
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Test {
@@ -10,20 +11,24 @@ public class Test {
 
 		
 
-
 		
 		
 		
 		
-		String about=HtmlRender.readHtml("D://about.xhtml");
+		
+		String html=HtmlRender.readHtml("D://about.xhtml");
 		
 		HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
 		htmlRender.addFontDirectory("D:/myfonts");
 		
-		htmlRender.toPng(about, "D://test.png");
 		
+		 
+		//htmlRender.toPng(html, "D://test.png");
 		
-		
+		 try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
+			 htmlRender.toPdf(html,outputStream);
+         }
+	 
 		 
 		
 //		String html = FileUtil.readUtf8String("D:\\about.xhtml");

@@ -77,14 +77,19 @@ public class BuilderConfig {
 
 	
 	public static final PdfBuilderConfig WITH_PDF = (builder) -> {
-		 builder.useUnicodeBidiSplitter(new ICUBidiSplitter.ICUBidiSplitterFactory());
-         builder.useUnicodeBidiReorderer(new ICUBidiReorderer());
-         builder.defaultTextDirection(BaseRendererBuilder.TextDirection.LTR);
-         builder.useSVGDrawer(new BatikSVGDrawer());
-         builder.useMathMLDrawer(new MathMLDrawer());
-         builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
-         builder.useObjectDrawerFactory(buildObjectDrawerFactory());
-         builder.usePdfAConformance(PdfAConformance.NONE);
+		
+		builder.usePdfAConformance(PdfAConformance.NONE);
+		builder.useSVGDrawer(new BatikSVGDrawer());
+		builder.useMathMLDrawer(new MathMLDrawer());
+		builder.useUnicodeBidiSplitter(new ICUBidiSplitter.ICUBidiSplitterFactory());
+		builder.useUnicodeBidiReorderer(new ICUBidiReorderer());
+		builder.useObjectDrawerFactory(buildObjectDrawerFactory());
+		
+		builder.defaultTextDirection(BaseRendererBuilder.TextDirection.LTR);
+
+		builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
+		
+		
 	};
 	
 	
