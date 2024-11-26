@@ -16,6 +16,7 @@ import com.openhtmltopdf.objects.StandardObjectDrawerFactory;
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder;
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.TextDirection;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance;
 import com.openhtmltopdf.render.DefaultObjectDrawerFactory;
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
 
@@ -75,7 +76,16 @@ public class BuilderConfig {
 	};
 
 	
-	
+	public static final PdfBuilderConfig WITH_PDF = (builder) -> {
+		 builder.useUnicodeBidiSplitter(new ICUBidiSplitter.ICUBidiSplitterFactory());
+         builder.useUnicodeBidiReorderer(new ICUBidiReorderer());
+         builder.defaultTextDirection(BaseRendererBuilder.TextDirection.LTR);
+         builder.useSVGDrawer(new BatikSVGDrawer());
+         builder.useMathMLDrawer(new MathMLDrawer());
+         builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
+         builder.useObjectDrawerFactory(buildObjectDrawerFactory());
+         builder.usePdfAConformance(PdfAConformance.NONE);
+	};
 	
 	
 	
@@ -155,6 +165,15 @@ public class BuilderConfig {
 		public void setText(String newText) {
 			this.matcher = SPACES.matcher(newText);
 		}
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public static DefaultObjectDrawerFactory buildObjectDrawerFactory() {
+		DefaultObjectDrawerFactory objectDrawerFactory = new StandardObjectDrawerFactory();
+		objectDrawerFactory.registerDrawer("custom/binary-tree", new CustomObjectDrawerBinaryTree());
+		return objectDrawerFactory;
 	}
 
 }

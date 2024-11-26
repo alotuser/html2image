@@ -153,6 +153,39 @@ public class HtmlRender {
 	}
 
 	/**
+	 * toPdf
+	 * 		OutputStream outputStream = new ByteArrayOutputStream(4096)
+	 * @param html   html
+	 * @param config config
+	 * @return BufferedImage
+	 * @throws IOException
+	 */
+	public void toPdf(String html,OutputStream outputStream, BaseBuilderConfig... config) throws IOException {
+		
+		XRLog.setLoggingEnabled(loggingEnabled);
+
+		PdfRendererBuilder builder = new PdfRendererBuilder();
+
+		builder.withHtmlContent(html, "");
+		builder.useDefaultPageSize(pageWidth, pageHeight, units);
+		builder.useFastMode();
+
+		// pdf
+		BuilderConfig.WITH_PDF.configure(builder);
+		// 字体
+		WITH_FOOTS.configure(builder);
+		// 配置
+		for (BaseBuilderConfig baseBuilderConfig : config) {
+			baseBuilderConfig.configure(builder);
+		}
+
+		builder.toStream(outputStream);
+		builder.run();
+
+	}
+
+	
+	/**
 	 * toPng
 	 * 
 	 * @param html    html
@@ -181,6 +214,7 @@ public class HtmlRender {
 		return image;
 	}
 	
+	
 	/**
 	 * fonts eg： .otf  .ttf
 	 */
@@ -202,7 +236,6 @@ public class HtmlRender {
 
 	};
 
-	
 	
 	
 	public Float getPageWidth() {
