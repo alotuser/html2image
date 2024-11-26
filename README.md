@@ -25,14 +25,26 @@
 解决方案 - 使用 Html2Image 将这些电子邮件地址转换为图像。
 
 
- # 用法
-
-  String html=HtmlRender.readHtml("D://about.xhtml");
-		HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
-		htmlRender.addFontDirectory("D:/myfonts");
-		//生成图片
-		htmlRender.toPng(html, "D://test.png");
-		//生成pdf文件
-		try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
-			   htmlRender.toPdf(html,outputStream);
-  }
+ # 用法demo
+``` java
+  	String html=HtmlRender.readHtml("D://about.xhtml");
+	HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
+	htmlRender.addFontDirectory("D:/myfonts");
+	//生成图片
+	htmlRender.toPng(html, "D://test.png");
+	//生成pdf文件
+	try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
+		htmlRender.toPdf(html,outputStream);
+  	}
+```
+## 怎么使用？
+- 使用方法很简单，和普通的 Maven 一样使用就可以了，如下
+``` xml
+    <dependencys>
+        <dependency>
+            <groupId>com.github.alotuser</groupId>
+            <artifactId>html2image</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencys>
+```
