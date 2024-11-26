@@ -172,8 +172,8 @@ public class BuilderConfig {
 		}
 	}
 	/**
-	 * 
-	 * @return
+	 * DefaultObjectDrawerFactory
+	 * @return DefaultObjectDrawerFactory
 	 */
 	public static DefaultObjectDrawerFactory buildObjectDrawerFactory() {
 		DefaultObjectDrawerFactory objectDrawerFactory = new StandardObjectDrawerFactory();

@@ -106,7 +106,7 @@ public class QtPageProcessor implements FSPageProcessor {
 	 * Create a graphics device that can be supplied to useLayoutGraphics.
 	 * The caller is responsible for calling dispose on the returned device.
 	 * 
-	 * @return
+	 * @return Graphics2D
 	 */
 	public Graphics2D createLayoutGraphics() {
 		BufferedImage bf = new BufferedImage(1, 1, _imageType);
