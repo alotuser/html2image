@@ -176,12 +176,10 @@ public class HtmlRender {
 	 */
 	public BufferedImage toPng(String html) throws IOException {
 
-		setImageType(BufferedImage.TYPE_INT_ARGB);
 		BufferedImage image = toImage(html, BuilderConfig.WITH_BASE);
 		
 		return image;
 	}
-	
 	
 	/**
 	 * fonts eg： .otf  .ttf
@@ -269,7 +267,8 @@ public class HtmlRender {
 	}
 
 	
-	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private BufferedImage runRendererSingle(String html, final String filename) throws IOException {
 
 		Java2DRendererBuilder builder = new Java2DRendererBuilder();
@@ -304,7 +303,9 @@ public class HtmlRender {
 		// builder.toPageProcessor(new DefaultPageProcessor(zeroBasedPageNumber -> new FileOutputStream(filename.replace(".png", "_" + zeroBasedPageNumber + ".png")), BufferedImage.TYPE_INT_ARGB, "PNG")).runPaged();
 
 	}
-
+	
+	@Deprecated
+	@SuppressWarnings("unused")
 	private List<BufferedImage> runRendererPaged(String resourcePath, String html) {
 		Java2DRendererBuilder builder = new Java2DRendererBuilder();
 		builder.withHtmlContent(html, null);
@@ -327,7 +328,9 @@ public class HtmlRender {
 
 		return bufferedImagePageProcessor.getPageImages();
 	}
-
+	
+	@Deprecated
+	@SuppressWarnings("unused")
 	private void renderSamplePNG(String html, final String filename) throws IOException {
 		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
 
@@ -365,6 +368,7 @@ public class HtmlRender {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void renderPDF(String html, PdfAConformance pdfaConformance, OutputStream outputStream) throws IOException {
 		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
 

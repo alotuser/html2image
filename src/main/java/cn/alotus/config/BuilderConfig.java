@@ -20,7 +20,9 @@ import com.openhtmltopdf.render.DefaultObjectDrawerFactory;
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
 
 import cn.alotus.drawer.CustomObjectDrawerBinaryTree;
-
+/**
+ * BuilderConfig.WITH_BASE
+ */
 public class BuilderConfig {
 
 	@FunctionalInterface
