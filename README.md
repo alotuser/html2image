@@ -28,7 +28,7 @@
  # 用法demo
 ``` java
   	String html=HtmlRender.readHtml("D://about.xhtml");
-	HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
+	HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);//main： BufferedImage.TYPE_INT_ARGB
 	htmlRender.addFontDirectory("D:/myfonts");
 	//生成图片
 	htmlRender.toPng(html, "D://test.png");
