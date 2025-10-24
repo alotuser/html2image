@@ -1,0 +1,201 @@
+package cn.alotus.render;
+
+import java.awt.Shape;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.openhtmltopdf.layout.Layer;
+import com.openhtmltopdf.newtable.TableCellBox;
+import com.openhtmltopdf.newtable.TableSectionBox;
+import com.openhtmltopdf.render.BlockBox;
+import com.openhtmltopdf.render.Box;
+import com.openhtmltopdf.render.DisplayListItem;
+import com.openhtmltopdf.render.LineBox;
+import com.openhtmltopdf.render.OperatorClip;
+import com.openhtmltopdf.render.OperatorSetClip;
+
+public class AsBoxCollector {
+
+    private List<DisplayListItem> _blocks = null;
+    private List<DisplayListItem> _inlines = null;
+    private List<TableCellBox> _tcells = null;
+    private List<DisplayListItem> _replaceds = null;
+    private List<DisplayListItem> _listItems = null;
+    
+    private boolean _hasListItems = false;
+    private boolean _hasReplaceds = false;
+    
+    private void addBlock(DisplayListItem block) {
+        if (_blocks == null) {
+            _blocks = new ArrayList<>();
+        }
+        _blocks.add(block);
+    }
+    
+    private void addInline(DisplayListItem inline) {
+        if (_inlines == null) {
+            _inlines = new ArrayList<>();
+        }
+        _inlines.add(inline);
+    }
+    
+    private void addTableCell(TableCellBox tcell) {
+        if (_tcells == null) {
+            _tcells = new ArrayList<>();
+        }
+        _tcells.add(tcell);
+    }
+    
+    private void addReplaced(DisplayListItem replaced) {
+        if (_replaceds == null) {
+            _replaceds = new ArrayList<>();
+        }
+        _replaceds.add(replaced);
+        
+        if (!(replaced instanceof OperatorClip) &&
+            !(replaced instanceof OperatorSetClip)) {
+            _hasReplaceds = true;
+        }
+    }
+    
+    private void addListItem(DisplayListItem listItem) {
+        if (_listItems == null) {
+            _listItems = new ArrayList<>();
+        }
+        _listItems.add(listItem);
+        
+        if (!(listItem instanceof OperatorClip) &&
+            !(listItem instanceof OperatorSetClip)) {
+            _hasListItems = true;
+        }
+    }
+    
+    private void clipAll(OperatorClip dli) {
+        addBlock(dli);
+        addInline(dli);
+        addReplaced(dli);
+        addListItem(dli);
+    }
+    
+    private void setClipAll(OperatorSetClip dli) {
+        addBlock(dli);
+        addInline(dli);
+        addReplaced(dli);
+        addListItem(dli);
+    }
+    
+    public List<DisplayListItem> blocks() {
+        return this._blocks == null ? Collections.<DisplayListItem>emptyList() : this._blocks;
+    }
+    
+    public List<DisplayListItem> inlines() {
+        return this._inlines == null ? Collections.<DisplayListItem>emptyList() : this._inlines;
+    }
+    
+    public List<TableCellBox> tcells() {
+        return this._tcells == null ? Collections.<TableCellBox>emptyList() : this._tcells;
+    }
+    
+    public List<DisplayListItem> replaceds() {
+        return this._hasReplaceds ? this._replaceds : Collections.<DisplayListItem>emptyList();
+    }
+    
+    public List<DisplayListItem> listItems() {
+        return this._hasListItems ? this._listItems : Collections.<DisplayListItem>emptyList();
+    }
+    
+    /**
+     * Adds block box to appropriate flat box lists.
+     */
+    private boolean addBlockToLists(Layer layer, Box container, Shape ourClip) {
+        addBlock(container);
+        
+        if (container instanceof BlockBox) {
+            BlockBox block = (BlockBox) container;
+            
+            if (block.getReplacedElement() != null) {
+                addReplaced(block);
+            }
+            
+            if (block.isListItem()) {
+                addListItem(block);
+            }
+        }
+        
+        if (container instanceof TableCellBox &&
+            ((TableCellBox) container).hasCollapsedPaintingBorder()) {
+            addTableCell((TableCellBox) container);
+        }
+        
+        if (ourClip != null) {
+            clipAll(new OperatorClip(ourClip));
+            return true;
+        }
+        
+        return false;
+    }
+
+    public void collect(Layer layer) {
+        collect(layer, layer.getMaster());
+    }
+
+    public void collect(Layer layer, Box container) {
+        if (layer != container.getContainingLayer()) {
+            // Different layers are responsible for their own box collection.
+            return;
+        }
+
+        if (container instanceof LineBox) {
+            addLineBox(layer, (LineBox) container);
+        } else {
+            Shape ourClip = null;
+            boolean pushedClip = false;
+            
+            if (container.getLayer() == null ||
+                layer.getMaster() == container ||
+                !(container instanceof BlockBox)) {
+
+                if (container instanceof BlockBox) {
+
+                    BlockBox block = (BlockBox) container;
+                    
+//                    if (block.isNeedsClipOnPaint(c)) {
+//                        // A box with overflow set to hidden.
+//                        ourClip = block.getChildrenClipEdge(c);
+//                    }
+                }
+                
+                pushedClip = addBlockToLists(layer, container, ourClip);
+            }
+
+            if (container instanceof TableSectionBox &&
+                (((TableSectionBox) container).isHeader() || ((TableSectionBox) container).isFooter()) &&
+                ((TableSectionBox) container).getTable().hasContentLimitContainer() &&
+                (container.getLayer() == null || container == layer.getMaster())) {
+                // TODO
+                //addTableHeaderFooter(c, layer, container);
+            } else {
+                // Recursively, process all children and their children.
+                if (container.getLayer() == null || container == layer.getMaster()) {
+                    for (int i = 0; i < container.getChildCount(); i++) {
+                        Box child = container.getChild(i);
+                        collect(layer, child);
+                    }
+                }
+            }
+            
+            if (pushedClip) {
+                setClipAll(new OperatorSetClip(null));
+            }
+        }
+    }
+
+    private void addLineBox(Layer layer, LineBox container) {
+        addInline(container);
+
+        // Recursively add all children of the line box to the inlines list.
+        container.addAllChildren(this._inlines, layer);
+    }
+
+}

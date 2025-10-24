@@ -1,8 +1,16 @@
 package cn.alotus;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import org.w3c.dom.Element;
+
+import cn.alotus.util.ImageCropUtil;
 
 public class Test {
 
@@ -10,24 +18,63 @@ public class Test {
 	public static void main(String[] args) throws IOException {
 
 		
-
+	
+	 
+		
+		 
 		
 		
 		
-		
-		
-		String html=HtmlRender.readHtml("D://about.xhtml");
+		String html=HtmlRender.readHtml("D://1.html");
 		
 		HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
 		htmlRender.addFontDirectory("D:/myfonts");
+		htmlRender.setPageWidth(400f);
+		htmlRender.setPageHeight(600f);
+		htmlRender.setScale(1f);
 		
+		
+		//htmlRender.toImage(html, BuilderConfig.WITH_CUSTOM);
+		
+		
+		
+
+//		
+//		
+//		htmlRender.toImage(html, builder->{
+//			 builder.useFont(new File("myfont"), "myfont");
+//		});
+//		
 		
 		 
-		//htmlRender.toPng(html, "D://test.png");
+		htmlRender.toPng(html, "D://1.png");
 		
-		 try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
-			 htmlRender.toPdf(html,outputStream);
-         }
+		Map<Element, Rectangle>   mers= htmlRender.findByClass("product-name");
+		//[x=7,y=321,width=359,height=20]
+		
+		System.out.println(mers);
+		
+		Rectangle  f =mers.values().stream().findFirst().get();
+		
+		
+		
+		BufferedImage original = ImageIO.read(new File("D:\\1.png"));
+		Rectangle rect = new Rectangle(f.x, f.y+12, f.width, f.height);
+		
+			 
+		
+		
+		
+		BufferedImage cropped = ImageCropUtil.cropImage(original, rect);
+		ImageIO.write(cropped, "png", new File("D:\\cropped.png"));
+		
+		
+		
+		
+		
+//		 try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
+//			 htmlRender.toPdf(html,outputStream);
+//         }
 	 
 		 
 		

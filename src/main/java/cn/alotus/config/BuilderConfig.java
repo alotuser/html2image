@@ -20,6 +20,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance;
 import com.openhtmltopdf.render.DefaultObjectDrawerFactory;
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
 
+import cn.alotus.builder.AsRendererBuilder;
 import cn.alotus.drawer.CustomObjectDrawerBinaryTree;
 /**
  * BuilderConfig.WITH_BASE
@@ -29,6 +30,11 @@ public class BuilderConfig {
 	@FunctionalInterface
 	public interface BaseBuilderConfig {
 		public void configure(BaseRendererBuilder<?, ?> builder);
+	}
+	
+	@FunctionalInterface
+	public interface AsBuilderConfig {
+		public void configure(AsRendererBuilder builder);
 	}
 
 	@FunctionalInterface
