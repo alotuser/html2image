@@ -344,7 +344,7 @@ public class HtmlRender {
 	
 	/**
 	 * pageWidth
-	 * @return
+	 * @return pageWidth
 	 */
 	public Float getPageWidth() {
 		return pageWidth;
@@ -362,7 +362,7 @@ public class HtmlRender {
 	/**
 	 * pageHeight
 	 * 
-	 * @return
+	 * @return pageHeight
 	 */
 	public Float getPageHeight() {
 		return pageHeight;
@@ -380,7 +380,7 @@ public class HtmlRender {
 	/**
 	 * units
 	 * 
-	 * @return
+	 * @return units
 	 */
 	public PageSizeUnits getUnits() {
 		return units;
@@ -398,7 +398,7 @@ public class HtmlRender {
 	/**
 	 * imageType
 	 * 
-	 * @return
+	 * @return imageType
 	 */
 	public int getImageType() {
 		return imageType;
@@ -416,7 +416,7 @@ public class HtmlRender {
 	/**
 	 * scale
 	 * 
-	 * @return
+	 * @return scale
 	 */
 	public double getScale() {
 		return scale;
@@ -434,7 +434,7 @@ public class HtmlRender {
 	/**
 	 * fontPath
 	 * 
-	 * @return
+	 * @return fontPath
 	 */
 	public String getFontPath() {
 		return fontPath;
@@ -461,7 +461,7 @@ public class HtmlRender {
 	/**
 	 * loggingEnabled
 	 * 
-	 * @return
+	 * @return loggingEnabled
 	 */
 	public Boolean getLoggingEnabled() {
 		return loggingEnabled;
@@ -477,7 +477,7 @@ public class HtmlRender {
 	}
 	/**
 	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * @return
+	 * @return useXp
 	 */
 	public boolean isUseXp() {
 		return useXp;
@@ -493,7 +493,7 @@ public class HtmlRender {
 	/**
 	 * getAsRenderer
 	 * 
-	 * @return
+	 * @return AsRenderer
 	 */
 	public AsRenderer getAsRenderer() {
 		return asRenderer;
