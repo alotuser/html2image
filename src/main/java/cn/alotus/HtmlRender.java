@@ -342,63 +342,136 @@ public class HtmlRender {
 		});
 	}
 	
-	
+	/**
+	 * pageWidth
+	 * @return
+	 */
 	public Float getPageWidth() {
 		return pageWidth;
 	}
 
+	/**
+	 * pageWidth
+	 * 
+	 * @param pageWidth
+	 */
 	public void setPageWidth(Float pageWidth) {
 		this.pageWidth = pageWidth;
 	}
 
+	/**
+	 * pageHeight
+	 * 
+	 * @return
+	 */
 	public Float getPageHeight() {
 		return pageHeight;
 	}
 
+	/**
+	 * pageHeight
+	 * 
+	 * @param pageHeight
+	 */
 	public void setPageHeight(Float pageHeight) {
 		this.pageHeight = pageHeight;
 	}
 
+	/**
+	 * units
+	 * 
+	 * @return
+	 */
 	public PageSizeUnits getUnits() {
 		return units;
 	}
 
+	/**
+	 * units
+	 * 
+	 * @param units
+	 */
 	public void setUnits(PageSizeUnits units) {
 		this.units = units;
 	}
 
+	/**
+	 * imageType
+	 * 
+	 * @return
+	 */
 	public int getImageType() {
 		return imageType;
 	}
 
+	/**
+	 * imageType
+	 * 
+	 * @param imageType
+	 */
 	public void setImageType(int imageType) {
 		this.imageType = imageType;
 	}
 
+	/**
+	 * scale
+	 * 
+	 * @return
+	 */
 	public double getScale() {
 		return scale;
 	}
 
+	/**
+	 * scale
+	 * 
+	 * @param scale
+	 */
 	public void setScale(double scale) {
 		this.scale = scale;
 	}
 
+	/**
+	 * fontPath
+	 * 
+	 * @return
+	 */
 	public String getFontPath() {
 		return fontPath;
 	}
 
+	/**
+	 * fontPath
+	 * 
+	 * @param fontPath
+	 */
 	public void setFontPath(String fontPath) {
 		this.fontPath = fontPath;
 	}
 
+	/**
+	 * addFontDirectory
+	 * 
+	 * @param fontPath
+	 */
 	public void addFontDirectory(String fontPath) {
 		this.fontPath = fontPath;
 	}
 
+	/**
+	 * loggingEnabled
+	 * 
+	 * @return
+	 */
 	public Boolean getLoggingEnabled() {
 		return loggingEnabled;
 	}
 
+	/**
+	 * loggingEnabled
+	 * 
+	 * @param loggingEnabled
+	 */
 	public void setLoggingEnabled(Boolean loggingEnabled) {
 		this.loggingEnabled = loggingEnabled;
 	}
@@ -417,10 +490,73 @@ public class HtmlRender {
 		this.useXp = useXp;
 	}
 
+	/**
+	 * getAsRenderer
+	 * 
+	 * @return
+	 */
 	public AsRenderer getAsRenderer() {
 		return asRenderer;
 	}
 	
+	
+	/**
+	 * create
+	 * 
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create() {
+		return new HtmlRender();
+	}
+
+	/**
+	 * create
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
+	 * @param units      units
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units) {
+		return new HtmlRender(pageWidth, pageHeight, units);
+	}
+
+	/**
+	 * create
+	 * 
+	 * @param imageType imageType
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create(int imageType) {
+		return new HtmlRender(imageType);
+	}
+
+	/**
+	 * create
+	 * 
+	 * @param imageType imageType
+	 * @param scale     scale
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create(int imageType, double scale) {
+		return new HtmlRender(imageType, scale);
+	}
+
+	/**
+	 * create
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
+	 * @param units      units
+	 * @param imageType  imageType
+	 * @param scale      scale
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
+		return new HtmlRender(pageWidth, pageHeight, units, imageType, scale);
+	}
+	
+ 
 	
 	
 	@SuppressWarnings("unused")

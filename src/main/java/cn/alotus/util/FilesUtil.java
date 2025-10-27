@@ -1,5 +1,8 @@
 package cn.alotus.util;
 
+/**
+ * 文件工具类
+ */
 public class FilesUtil {
 
 	public static final char SLASH = '/';

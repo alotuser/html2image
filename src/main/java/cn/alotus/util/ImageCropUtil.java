@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
+/**
+ * 图片截取工具类
+ */
 public class ImageCropUtil {
 
 	/**
@@ -54,27 +56,14 @@ public class ImageCropUtil {
 
 		return croppedImage;
 	}
-
+	/**
+	 * 获取文件格式
+	 * @param filePath
+	 * @return
+	 */
 	private static String getFileFormat(String filePath) {
 		String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
 		return extension.toLowerCase();
 	}
-	
-	
-	
-	
-	public static void main(String[] args) throws IOException {
-		
-		
-		// 基本使用
-		//ImageCropUtil.cropAndSave("input.jpg", "output.jpg", 100, 100, 300, 200);
-		// 或者手动处理
-		BufferedImage original = ImageIO.read(new File("D:\\111.png"));
-		Rectangle rect = new Rectangle(7, 28, 359, 40);
-		BufferedImage cropped = ImageCropUtil.cropImage(original, rect);
-		ImageIO.write(cropped, "png", new File("D:\\cropped.png"));
-		
-		
-		
-	}
+
 }

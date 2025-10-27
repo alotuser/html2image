@@ -17,30 +17,18 @@ public class Test {
 	
 	public static void main(String[] args) throws IOException {
 
-		
-	
-	 
-		
-		 
-		
-		
-		
+
 		String html=HtmlRender.readHtml("D://1.html");
 		
-		HtmlRender htmlRender=new HtmlRender(BufferedImage.TYPE_INT_RGB);
+		HtmlRender htmlRender=HtmlRender.create(BufferedImage.TYPE_INT_RGB);
 		htmlRender.addFontDirectory("D:/myfonts");
 		htmlRender.setPageWidth(400f);
-		htmlRender.setPageHeight(600f);
+		htmlRender.setPageHeight(300f);
 		htmlRender.setScale(1f);
 		
 		
 		//htmlRender.toImage(html, BuilderConfig.WITH_CUSTOM);
 		
-		
-		
-
-//		
-//		
 //		htmlRender.toImage(html, builder->{
 //			 builder.useFont(new File("myfont"), "myfont");
 //		});
@@ -49,9 +37,9 @@ public class Test {
 		 
 		htmlRender.toPng(html, "D://1.png");
 		
-		Map<Element, Rectangle>   mers= htmlRender.findByClass("product-name");
-		//[x=7,y=321,width=359,height=20]
-		
+		Map<Element, Rectangle>   mers= htmlRender.findByClass("original-price");
+//		//[x=7,y=321,width=359,height=20]
+//		
 		System.out.println(mers);
 		
 		Rectangle  f =mers.values().stream().findFirst().get();
@@ -59,14 +47,11 @@ public class Test {
 		
 		
 		BufferedImage original = ImageIO.read(new File("D:\\1.png"));
-		Rectangle rect = new Rectangle(f.x, f.y+12, f.width, f.height);
-		
-			 
-		
-		
-		
+
+		Rectangle rect = new Rectangle(f.x, f.y, f.width, f.height);
+
 		BufferedImage cropped = ImageCropUtil.cropImage(original, rect);
-		ImageIO.write(cropped, "png", new File("D:\\cropped.png"));
+		ImageIO.write(cropped, "png", new File("D:\\1-cropped.png"));
 		
 		
 		

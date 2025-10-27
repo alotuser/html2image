@@ -23,6 +23,9 @@ import com.openhtmltopdf.java2d.api.Java2DRendererBuilder;
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.FontStyle;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
+/**
+ * Utility methods for finding and adding fonts.
+ */
 public class FontUtil {
 
 	private FontUtil() {
