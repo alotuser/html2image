@@ -48,5 +48,5 @@
         </dependency>
     </dependencys>
 ```
-# html2image-demo
+# 高级进阶用法-demo
 https://github.com/alotuser/html2image-demo
