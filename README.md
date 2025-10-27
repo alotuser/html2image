@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.github.alotuser</groupId>
             <artifactId>html2image</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.1</version>
         </dependency>
     </dependencys>
 ```
