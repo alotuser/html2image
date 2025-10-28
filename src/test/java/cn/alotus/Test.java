@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.w3c.dom.Element;
 
+import cn.alotus.util.AsBoxUtil;
 import cn.alotus.util.ImageCropUtil;
 
 public class Test {
@@ -33,18 +34,18 @@ public class Test {
 //			 builder.useFont(new File("myfont"), "myfont");
 //		});
 //		
-		
 		 
 		htmlRender.toPng(html, "D://1.png");
 		
+		System.out.println(AsBoxUtil.descendantDump(htmlRender.getAsRenderer().getRootBox()));
+		
+		
+
 		Map<Element, Rectangle>   mers= htmlRender.findByClass("original-price");
-//		//[x=7,y=321,width=359,height=20]
-//		
-		System.out.println(mers);
+		
+		//System.out.println(mers);
 		
 		Rectangle  f =mers.values().stream().findFirst().get();
-		
-		
 		
 		BufferedImage original = ImageIO.read(new File("D:\\1.png"));
 

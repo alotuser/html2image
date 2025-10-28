@@ -276,7 +276,7 @@ public class HtmlRender {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
 		
-		return asRenderer.getContentAreaEdge(e -> {
+		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(id, e.getAttribute(HTML.Attribute.ID.toString()));
 		});
 	}
@@ -291,7 +291,7 @@ public class HtmlRender {
 		if (asRenderer == null) {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
-		return asRenderer.getContentAreaEdge(e -> {
+		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(name, e.getAttribute(HTML.Attribute.NAME.toString()));
 		});
 	}
@@ -306,7 +306,7 @@ public class HtmlRender {
 		if (asRenderer == null) {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
-		return asRenderer.getContentAreaEdge(e -> {
+		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(cssClass, e.getAttribute(HTML.Attribute.CLASS.toString()));
 		});
 	}
@@ -321,7 +321,7 @@ public class HtmlRender {
 		if (asRenderer == null) {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
-		return asRenderer.getContentAreaEdge(e -> {
+		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(tagName, e.getTagName());
 		});
 	}
@@ -337,7 +337,7 @@ public class HtmlRender {
 		if (asRenderer == null) {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
-		return asRenderer.getContentAreaEdge(e -> {
+		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(value, e.getAttribute(name));
 		});
 	}

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -57,6 +58,7 @@ import com.openhtmltopdf.outputdevice.helper.PageDimensions;
 import com.openhtmltopdf.outputdevice.helper.UnicodeImplementation;
 import com.openhtmltopdf.render.BlockBox;
 import com.openhtmltopdf.render.Box;
+import com.openhtmltopdf.render.InlineLayoutBox;
 import com.openhtmltopdf.render.PageBox;
 import com.openhtmltopdf.render.RenderingContext;
 import com.openhtmltopdf.render.ViewportBox;
@@ -513,7 +515,7 @@ public class AsRenderer implements Closeable {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// 															AS Methods 			   		 					 							 ///
+	/// AS Methods ///
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -575,8 +577,77 @@ public class AsRenderer implements Closeable {
 		return result;
 
 	}
+	/**
+	 * Find rectangles of elements matching the given predicate.
+	 * @param predicate
+	 * @return A map of elements to their rectangles.
+	 */
+	public Map<Element, Rectangle> findElementRectangle(Predicate<Element> predicate) {
 
- 
+		Map<Element, Rectangle> result = new HashMap<Element, Rectangle>();
+
+		List<Object> renderObjects = new ArrayList<>();
+		
+		findBoxs(_root, renderObjects);
+
+		List<Object> boxs = renderObjects.stream().filter(x -> {
+			if (x instanceof Box) {
+				Box b = (Box) x;
+				if (null != b.getElement()) {
+					return predicate.test(b.getElement());
+				}
+			}
+			return false;
+		}).collect(Collectors.toList());
+
+		for (Object box : boxs) {
+
+			Box master = (Box) box;
+			Element ele = master.getElement();
+
+			if (ele == null) {
+				continue;
+			}
+			result.put(ele, master.getContentAreaEdge(master.getAbsX(), master.getAbsY(), _renderingContext));
+			
+		}
+		return result;
+
+	}
+
+	/**
+	 * Recursively find boxes and add them to the output list.
+	 * 
+	 * @param parent The parent box to start from.
+	 * @param out    The output list to store found boxes.
+	 */
+	public void findBoxs(Box parent, List<Object> out) {
+		out.add(parent);
+
+		for (Box child : parent.getChildren()) {
+			findBoxs(child, out);
+		}
+
+		if (parent instanceof BlockBox && ((BlockBox) parent).getInlineContent() != null) {
+			for (Object child : ((BlockBox) parent).getInlineContent()) {
+				if (child instanceof Box) {
+					findBoxs((Box) child, out);
+				} else {
+					out.add(child);
+				}
+			}
+		}
+
+		if (parent instanceof InlineLayoutBox) {
+			for (Object child : ((InlineLayoutBox) parent).getInlineChildren()) {
+				if (child instanceof Box) {
+					findBoxs((Box) child, out);
+				} else {
+					out.add(child);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Convert attributes of a NamedNodeMap to a string representation.
@@ -675,11 +746,8 @@ public class AsRenderer implements Closeable {
 	 * 
 	 * @return The rendering context.
 	 */
-	public  RenderingContext getRenderingContext() {
-        return _renderingContext;
-    }
-
-
-
+	public RenderingContext getRenderingContext() {
+		return _renderingContext;
+	}
 
 }
