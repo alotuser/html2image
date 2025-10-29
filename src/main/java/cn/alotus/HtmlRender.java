@@ -51,7 +51,7 @@ public class HtmlRender {
 	// private final float x=2.54F*10F/72F;//0.35277778
 	private boolean useXp=true;
 	private String fontPath;
-
+	private String baseDocumentUri;
 	private volatile Boolean loggingEnabled = false;
 
 	private AsRenderer asRenderer;
@@ -101,8 +101,8 @@ public class HtmlRender {
 
 		AsRendererBuilder builder = new AsRendererBuilder();
 
-		builder.withHtmlContent(html, "");
-
+		builder.withHtmlContent(html, baseDocumentUri);
+		 
 		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(imageType, scale);
 
 		builder.useDefaultPageSize(getPageWidth(), getPageHeight(), units);
@@ -488,6 +488,20 @@ public class HtmlRender {
 	 */
 	public void setUseXp(boolean useXp) {
 		this.useXp = useXp;
+	}
+	/**
+	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
+	 * @return
+	 */
+	public String getBaseDocumentUri() {
+		return baseDocumentUri;
+	}
+	/**
+	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
+	 * @param baseDocumentUri
+	 */
+	public void setBaseDocumentUri(String baseDocumentUri) {
+		this.baseDocumentUri = baseDocumentUri;
 	}
 
 	/**
