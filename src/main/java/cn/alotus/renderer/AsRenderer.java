@@ -500,6 +500,10 @@ public class AsRenderer implements Closeable {
 		return _root;
 	}
 
+	public Document getDocument() {
+		return _doc;
+	}
+	
 	public int getPageCount() {
 		return _root.getLayer().getPages().size();
 	}

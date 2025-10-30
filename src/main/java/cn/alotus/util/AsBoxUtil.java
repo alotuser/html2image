@@ -2,7 +2,10 @@ package cn.alotus.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -19,6 +22,30 @@ import com.openhtmltopdf.render.LineBox;
  */
 public class AsBoxUtil {
 
+	
+	
+	 /**
+     * A stream of all descendant boxes not including
+     * InlineText or InlineBox objects.
+     *
+     * This would usually only be called after layout is concluded
+     * as InlineBox objects are converted to one or more InlineLayoutBox
+     * during layout.
+     * 
+     * Should be in breadth first order.
+     */
+    public static Stream<Box> descendants(Box parent) {
+        return StreamSupport.stream(new AsBoxSpliterator(parent), false);
+    }
+
+    /**
+     * See {@link #descendants(Box)}
+     */
+    public static List<Box> descendantsList(Box parent) {
+        return descendants(parent).collect(Collectors.toList());
+    }
+    
+    
 	/**
 	 * 生成指定Box及其所有后代Box的结构化字符串表示，便于调试和分析布局结构。
 	 * 
@@ -130,7 +157,7 @@ public class AsBoxUtil {
 		}
 	}
 
-	private static String formatAttrs(Element el) {
+	public static String formatAttrs(Element el) {
 		NamedNodeMap attrs = el.getAttributes();
 		if (attrs == null || attrs.getLength() == 0)
 			return "";
