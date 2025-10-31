@@ -49,12 +49,13 @@ public class HtmlRender {
 	private int imageType = BufferedImage.TYPE_INT_RGB;
 	private double scale = 1.0;
 	// private final float x=2.54F*10F/72F;//0.35277778
-	private boolean useXp=true;
+	private boolean usePx = true;
 	private String fontPath;
 	private String baseDocumentUri;
 	private volatile Boolean loggingEnabled = false;
 
 	private AsRenderer asRenderer;
+
 	public HtmlRender() {
 		super();
 	}
@@ -102,12 +103,12 @@ public class HtmlRender {
 		AsRendererBuilder builder = new AsRendererBuilder();
 
 		builder.withHtmlContent(html, baseDocumentUri);
-		 
+
 		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(imageType, scale);
 
 		builder.useDefaultPageSize(getPageWidth(), getPageHeight(), units);
 		builder.useEnvironmentFonts(true);
-		builder.usePixelDimensions(true);
+		builder.usePixelDimensions(usePx);
 		builder.useFastMode();
 		// 字体
 		WITH_FOOTS.configure(builder);
@@ -118,7 +119,7 @@ public class HtmlRender {
 
 		builder.toSinglePage(bufferedImagePageProcessor);
 
-		asRenderer=builder.runFirstPage();
+		asRenderer = builder.runFirstPage();
 
 		/*
 		 * Render Single Page Image
@@ -141,7 +142,7 @@ public class HtmlRender {
 
 		AsRendererBuilder builder = new AsRendererBuilder();
 
-		builder.withHtmlContent(html, "");
+		builder.withHtmlContent(html, baseDocumentUri);
 
 		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(imageType, scale);
 
@@ -154,7 +155,7 @@ public class HtmlRender {
 			baseBuilderConfig.configure(builder);
 		}
 		builder.toPageProcessor(bufferedImagePageProcessor);
-		asRenderer=builder.runPaged();
+		asRenderer = builder.runPaged();
 
 		/*
 		 * Render Single Page Image
@@ -174,7 +175,7 @@ public class HtmlRender {
 	public void toPdf(String html, OutputStream outputStream, PdfBuilderConfig... config) throws IOException {
 
 		toPdf((builder) -> {
-			builder.withHtmlContent(html, "");
+			builder.withHtmlContent(html, baseDocumentUri);
 			// builder.useDefaultPageSize(pageWidth, pageHeight, units);
 			builder.toStream(outputStream);
 		}, (builder) -> {
@@ -261,8 +262,6 @@ public class HtmlRender {
 
 	};
 
-	
-	
 	/**
 	 * Find elements by ID and return their content area rectangles.
 	 * 
@@ -270,12 +269,10 @@ public class HtmlRender {
 	 * @return A map of elements to their content area rectangles.
 	 */
 	public Map<Element, Rectangle> findById(String id) {
-		
-		
 		if (asRenderer == null) {
 			throw new IllegalStateException("Please call toImage or toImages method first to initialize the renderer.");
 		}
-		
+
 		return asRenderer.findElementRectangle(e -> {
 			return StrUtil.equals(id, e.getAttribute(HTML.Attribute.ID.toString()));
 		});
@@ -341,9 +338,10 @@ public class HtmlRender {
 			return StrUtil.equals(value, e.getAttribute(name));
 		});
 	}
-	
+
 	/**
 	 * pageWidth
+	 * 
 	 * @return pageWidth
 	 */
 	public Float getPageWidth() {
@@ -475,29 +473,37 @@ public class HtmlRender {
 	public void setLoggingEnabled(Boolean loggingEnabled) {
 		this.loggingEnabled = loggingEnabled;
 	}
+
 	/**
 	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * @return useXp
-	 */
-	public boolean isUseXp() {
-		return useXp;
-	}
-	/**
-	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
+	 * 
 	 * @param useXp
 	 */
-	public void setUseXp(boolean useXp) {
-		this.useXp = useXp;
+	public void usePx(boolean usePx) {
+		this.usePx = usePx;
 	}
+
+	/**
+	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
+	 * 
+	 * @param useXp
+	 */
+	public void usePx() {
+		this.usePx = true;
+	}
+
 	/**
 	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
+	 * 
 	 * @return
 	 */
 	public String getBaseDocumentUri() {
 		return baseDocumentUri;
 	}
+
 	/**
 	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
+	 * 
 	 * @param baseDocumentUri
 	 */
 	public void setBaseDocumentUri(String baseDocumentUri) {
@@ -512,8 +518,7 @@ public class HtmlRender {
 	public AsRenderer getAsRenderer() {
 		return asRenderer;
 	}
-	
-	
+
 	/**
 	 * create
 	 * 
@@ -569,17 +574,14 @@ public class HtmlRender {
 	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
 		return new HtmlRender(pageWidth, pageHeight, units, imageType, scale);
 	}
-	
- 
-	
-	
+
 	@SuppressWarnings("unused")
 	@Deprecated
 	private BufferedImage runRendererSingle(String html, final String filename) throws IOException {
 
 		AsRendererBuilder builder = new AsRendererBuilder();
 
-		builder.withHtmlContent(html, "");
+		builder.withHtmlContent(html, baseDocumentUri);
 
 		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_RGB, 2.0);
 
@@ -614,7 +616,7 @@ public class HtmlRender {
 	@SuppressWarnings("unused")
 	private List<BufferedImage> runRendererPaged(String resourcePath, String html) {
 		AsRendererBuilder builder = new AsRendererBuilder();
-		builder.withHtmlContent(html, null);
+		builder.withHtmlContent(html, baseDocumentUri);
 		builder.useFastMode();
 		builder.testMode(true);
 
@@ -644,7 +646,7 @@ public class HtmlRender {
 			builder.useSVGDrawer(svg);
 			builder.useMathMLDrawer(mathMl);
 
-			builder.withHtmlContent(html, "");
+			builder.withHtmlContent(html, baseDocumentUri);
 
 			BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_ARGB, 2.0);
 
@@ -683,7 +685,7 @@ public class HtmlRender {
 			builder.useMathMLDrawer(mathMl);
 			builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
 			builder.usePdfAConformance(pdfaConformance);
-			builder.withHtmlContent(html, "");
+			builder.withHtmlContent(html, baseDocumentUri);
 			builder.toStream(outputStream);
 			builder.run();
 		}
