@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
 /**
  * 图片截取工具类
  */
@@ -15,11 +16,30 @@ public class ImageCropUtil {
 
 	/**
 	 * 截取图片并保存
+	 * 
+	 * @param inputPath
+	 * @param outputPath
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @return boolean
 	 */
 	public static boolean cropAndSave(String inputPath, String outputPath, int x, int y, int width, int height) {
+		return cropAndSave(inputPath, outputPath, new Rectangle(x, y, width, height));
+	}
+
+	/**
+	 * 截取图片并保存
+	 * 
+	 * @param inputPath
+	 * @param outputPath
+	 * @param rect
+	 * @return boolean
+	 */
+	public static boolean cropAndSave(String inputPath, String outputPath, Rectangle rect) {
 		try {
 			BufferedImage sourceImage = ImageIO.read(new File(inputPath));
-			Rectangle rect = new Rectangle(x, y, width, height);
 
 			BufferedImage croppedImage = cropImage(sourceImage, rect);
 
@@ -33,7 +53,11 @@ public class ImageCropUtil {
 	}
 
 	/**
-	 * 安全的图片截取方法
+	 * 截取图片
+	 * 
+	 * @param sourceImage
+	 * @param rect
+	 * @return BufferedImage
 	 */
 	public static BufferedImage cropImage(BufferedImage sourceImage, Rectangle rect) {
 		// 边界检查
@@ -56,10 +80,12 @@ public class ImageCropUtil {
 
 		return croppedImage;
 	}
+
 	/**
 	 * 获取文件格式
+	 * 
 	 * @param filePath
-	 * @return
+	 * @return String
 	 */
 	private static String getFileFormat(String filePath) {
 		String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
