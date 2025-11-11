@@ -158,7 +158,8 @@ public class AsBoxCollector {
 
                 if (container instanceof BlockBox) {
 
-                    BlockBox block = (BlockBox) container;
+                    @SuppressWarnings("unused")
+					BlockBox block = (BlockBox) container;
                     
 //                    if (block.isNeedsClipOnPaint(c)) {
 //                        // A box with overflow set to hidden.
