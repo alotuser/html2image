@@ -526,7 +526,7 @@ public class HtmlRender {
 	}
 
 	/**
-	 * fontPath setter
+	 * fontPath  eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
 	 *
 	 * @param fontPath directory that contains font files (.ttf, .otf)
 	 */
@@ -535,7 +535,7 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Convenience alias for setFontPath: register a directory of fonts.
+	 * Convenience alias for setFontPath: register a directory of fonts. eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
 	 *
 	 * @see setFontPath()
 	 * @param fontPath path to font directory
@@ -564,7 +564,7 @@ public class HtmlRender {
 
 	/**
 	 * Configure use of pixel units (px) for layout calculations.
-	 *
+	 *Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
 	 * @param useXp true to use pixel dimensions
 	 */
 	public void usePx(boolean usePx) {
@@ -572,7 +572,7 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Shortcut to enable pixel units.
+	 * Shortcut to enable pixel units. Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
 	 */
 	public void usePx() {
 		this.usePx = true;
@@ -605,33 +605,96 @@ public class HtmlRender {
 		return asRenderer;
 	}
 
+	///-----------------------------------------///
+	/// Static factory helpers for convenience. ///
+	///-----------------------------------------///
+	
 	/**
-	 * Static factory helpers for convenience.
+	 * Create HtmlRender with default settings.
+	 *
+	 * @return new HtmlRender instance
 	 */
 	public static HtmlRender create() {
 		return new HtmlRender();
 	}
 
+	/**
+	 * Create HtmlRender with specified page size.
+	 *
+	 * @param pageWidth  page width
+	 * @param pageHeight page height
+	 * @return new HtmlRender instance
+	 */
 	public static HtmlRender create(Float pageWidth, Float pageHeight) {
 		return new HtmlRender(pageWidth, pageHeight);
 	}
 
+	/**
+	 * Create HtmlRender with specified page size and units.
+	 *
+	 * @param pageWidth  page width
+	 * @param pageHeight page height
+	 * @param units      units for page size
+	 * @return new HtmlRender instance
+	 */
 	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units) {
 		return new HtmlRender(pageWidth, pageHeight, units);
 	}
 
+	/**
+	 * Create HtmlRender with specified image type.
+	 *
+	 * @param imageType {@link BufferedImage imageType}
+	 * @return new HtmlRender instance
+	 */
 	public static HtmlRender create(int imageType) {
 		return new HtmlRender(imageType);
 	}
 
+	/**
+	 * Create HtmlRender with specified image type and scale.
+	 *
+	 * @param imageType {@link BufferedImage imageType}
+	 * @param scale     rendering scale multiplier
+	 * @return new HtmlRender instance
+	 */
 	public static HtmlRender create(int imageType, double scale) {
 		return new HtmlRender(imageType, scale);
 	}
 
+	/**
+	 * Create HtmlRender with full configuration.
+	 *
+	 * @param pageWidth  page width
+	 * @param pageHeight page height
+	 * @param units      units for page size
+	 * @param imageType  {@link BufferedImage imageType}
+	 * @param scale      rendering scale multiplier
+	 * @return new HtmlRender instance
+	 */
 	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
 		return new HtmlRender(pageWidth, pageHeight, units, imageType, scale);
 	}
+	/**
+	 * Read HTML content from an absolute file path.
+	 *
+	 * @param absResPath absolute path to the HTML resource
+	 * @return HTML content as a UTF-8 string
+	 * @throws IOException on IO errors
+	 */
+	public static String readHtml(String absResPath) throws IOException {
 
+		try (InputStream htmlIs = new FileInputStream(absResPath)) {
+			byte[] htmlBytes = IOUtils.toByteArray(htmlIs);
+			return new String(htmlBytes, StandardCharsets.UTF_8);
+		}
+
+	}
+
+	
+	///-----------------------------------------///
+	/// @Deprecated. @SuppressWarnings("unused")///
+	///-----------------------------------------///
 	@SuppressWarnings("unused")
 	@Deprecated
 	private BufferedImage runRendererSingle(String html, final String filename) throws IOException {
@@ -747,14 +810,4 @@ public class HtmlRender {
 			builder.run();
 		}
 	}
-
-	public static String readHtml(String absResPath) throws IOException {
-
-		try (InputStream htmlIs = new FileInputStream(absResPath)) {
-			byte[] htmlBytes = IOUtils.toByteArray(htmlIs);
-			return new String(htmlBytes, StandardCharsets.UTF_8);
-		}
-
-	}
-
 }
