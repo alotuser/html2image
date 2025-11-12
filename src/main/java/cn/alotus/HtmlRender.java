@@ -1,3 +1,4 @@
+
 package cn.alotus;
 
 import java.awt.Rectangle;
@@ -40,20 +41,57 @@ import cn.alotus.renderer.AsRenderer;
 
 /**
  * HtmlRender
+ * <pre>
+ * HtmlRender is a convenience facade around OpenHTMLToPDF's building and rendering facilities. 
+ * It provides simple APIs to convert HTML content into images (single or multi-page), PDF streams, and PNG files. 
+ * The class exposes configuration points for page size, units, image type, scaling, font directories and base document URI.
+ *
+ * Usage summary: 
+ * - configure the instance (page size, units, fonts, baseDocumentUri, etc.) 
+ * - call toImage / toImages / toPdf / toPng to render content 
+ * - after rendering, use getAsRenderer() and findBy* methods to locate element rectangles
+ *
+ * Threading and lifecycle: 
+ *- HtmlRender holds an internal AsRenderer instance after rendering; findBy* methods require that rendering has been executed first (toImage or toImages).
+ *
+ * Note: 
+ * - This class aims to keep rendering details encapsulated and expose common flows used in the project.
+ *</pre>
+ * @author alotus
+ * @version 1.0
+ * @date 2024-05-15
  */
 public class HtmlRender {
 
+	// Page width in the configured units (default value provided).
 	private Float pageWidth = 123f;
+
+	// Page height in the configured units (default value provided).
 	private Float pageHeight = 123f;
+
+	// Units for page size measurements (MM, PT, IN, etc.).
 	private PageSizeUnits units = AsRendererBuilder.PageSizeUnits.MM;
+
+	// BufferedImage type used for produced images (e.g. BufferedImage.TYPE_INT_RGB).
 	private int imageType = BufferedImage.TYPE_INT_RGB;
+
+	// Global scale factor applied when rendering images.
 	private double scale = 1.0;
-	// private final float x=2.54F*10F/72F;//0.35277778
+
+	// Whether to use pixel dimensions for sizing (true = use px).
 	private boolean usePx = true;
+
+	// Optional directory or path that contains font files (.ttf, .otf).
+	// When set, fonts from this path will be registered with the builder.
 	private String fontPath;
+
+	// Base document URI used to resolve relative resources (images, CSS, etc.).
 	private String baseDocumentUri;
+
+	// Controls logging for OpenHTMLToPDF internals.
 	private volatile Boolean loggingEnabled = false;
 
+	// Internal renderer instance produced by builder after a render call.
 	private AsRenderer asRenderer;
 
 	public HtmlRender() {
@@ -61,9 +99,10 @@ public class HtmlRender {
 	}
 
 	/**
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
+	 * Construct with explicit page width and height (units set separately).
+	 *
+	 * @param pageWidth  page width in configured units
+	 * @param pageHeight page height in configured units
 	 */
 	public HtmlRender(Float pageWidth, Float pageHeight) {
 		super();
@@ -72,10 +111,11 @@ public class HtmlRender {
 	}
 
 	/**
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
-	 * @param units      units
+	 * Construct with explicit page size and units.
+	 *
+	 * @param pageWidth  page width
+	 * @param pageHeight page height
+	 * @param units      units for page size
 	 */
 	public HtmlRender(Float pageWidth, Float pageHeight, PageSizeUnits units) {
 		super();
@@ -86,7 +126,8 @@ public class HtmlRender {
 	}
 
 	/**
-	 * 
+	 * Construct specifying image buffer type.
+	 *
 	 * @param imageType {@link BufferedImage imageType}
 	 */
 	public HtmlRender(int imageType) {
@@ -95,9 +136,10 @@ public class HtmlRender {
 	}
 
 	/**
-	 * 
+	 * Construct specifying image buffer type and a scale factor.
+	 *
 	 * @param imageType {@link BufferedImage imageType}
-	 * @param scale     scale
+	 * @param scale     rendering scale multiplier
 	 */
 	public HtmlRender(int imageType, double scale) {
 		super();
@@ -106,12 +148,13 @@ public class HtmlRender {
 	}
 
 	/**
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
-	 * @param units      units
+	 * Full constructor allowing page size, units, image type and scale to be set.
+	 *
+	 * @param pageWidth  page width
+	 * @param pageHeight page height
+	 * @param units      units for page size
 	 * @param imageType  {@link BufferedImage imageType}
-	 * @param scale      scale
+	 * @param scale      rendering scale multiplier
 	 */
 	public HtmlRender(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
 		super();
@@ -123,12 +166,14 @@ public class HtmlRender {
 	}
 
 	/**
-	 * toImage
-	 * 
-	 * @param html   html
-	 * @param config config
-	 * @return BufferedImage
-	 * @throws IOException
+	 * Render provided HTML into a single BufferedImage.
+	 *
+	 * This method sets up a builder, applies configured fonts and any supplied builder configurations, and renders the first page as an image.
+	 *
+	 * @param html   the HTML content to render
+	 * @param config optional configuration callbacks applied to the builder
+	 * @return BufferedImage containing the first page render
+	 * @throws IOException when IO or rendering resources fail
 	 */
 	public BufferedImage toImage(String html, BaseBuilderConfig... config) throws IOException {
 
@@ -144,9 +189,9 @@ public class HtmlRender {
 		builder.useEnvironmentFonts(true);
 		builder.usePixelDimensions(usePx);
 		builder.useFastMode();
-		// 字体
+		// register fonts if provided
 		WITH_FOOTS.configure(builder);
-		// 配置
+		// apply external configurations
 		for (BaseBuilderConfig baseBuilderConfig : config) {
 			baseBuilderConfig.configure(builder);
 		}
@@ -163,12 +208,12 @@ public class HtmlRender {
 	}
 
 	/**
-	 * toImages
-	 * 
-	 * @param html   html
-	 * @param config config
-	 * @return List<BufferedImage>
-	 * @throws IOException
+	 * Render provided HTML into a list of BufferedImages (one per page).
+	 *
+	 * @param html   the HTML content to render
+	 * @param config optional configuration callbacks applied to the builder
+	 * @return List of BufferedImage, one entry per generated page
+	 * @throws IOException when IO or rendering resources fail
 	 */
 	public List<BufferedImage> toImages(String html, BaseBuilderConfig... config) throws IOException {
 
@@ -182,9 +227,9 @@ public class HtmlRender {
 
 		builder.useDefaultPageSize(getPageWidth(), getPageHeight(), units);
 		builder.useFastMode();
-		// 字体
+		// register fonts if provided
 		WITH_FOOTS.configure(builder);
-		// 配置
+		// apply external configurations
 		for (BaseBuilderConfig baseBuilderConfig : config) {
 			baseBuilderConfig.configure(builder);
 		}
@@ -192,19 +237,21 @@ public class HtmlRender {
 		asRenderer = builder.runPaged();
 
 		/*
-		 * Render Single Page Image
+		 * Render Paged Image(s)
 		 */
 		return bufferedImagePageProcessor.getPageImages();
 
 	}
 
 	/**
-	 * toPdf OutputStream outputStream = new ByteArrayOutputStream(4096)
-	 * 
-	 * @param html         html
-	 * @param outputStream outputStream
-	 * @param config       config
-	 * @throws IOException
+	 * Convert HTML to PDF and write to provided OutputStream.
+	 *
+	 * This convenience method delegates to a builder-based flow. The provided PdfBuilderConfig instances are applied before running the builder.
+	 *
+	 * @param html         html content to render
+	 * @param outputStream output stream to receive PDF bytes
+	 * @param config       optional pdf builder configuration callbacks
+	 * @throws IOException on IO errors
 	 */
 	public void toPdf(String html, OutputStream outputStream, PdfBuilderConfig... config) throws IOException {
 
@@ -213,7 +260,7 @@ public class HtmlRender {
 			// builder.useDefaultPageSize(pageWidth, pageHeight, units);
 			builder.toStream(outputStream);
 		}, (builder) -> {
-			// 配置
+			// apply provided pdf configs
 			for (PdfBuilderConfig baseBuilderConfig : config) {
 				baseBuilderConfig.configure(builder);
 			}
@@ -222,10 +269,12 @@ public class HtmlRender {
 	}
 
 	/**
-	 * toPdf
-	 * 
-	 * @param config config
-	 * @throws IOException
+	 * Render to PDF using PdfRendererBuilder and any provided PdfBuilderConfig.
+	 *
+	 * This method configures PDF-specific settings (PDF/A, fonts, etc.) and runs the builder synchronously.
+	 *
+	 * @param config optional pdf builder configuration callbacks
+	 * @throws IOException on IO errors during rendering
 	 */
 	public void toPdf(PdfBuilderConfig... config) throws IOException {
 
@@ -233,11 +282,11 @@ public class HtmlRender {
 
 		PdfRendererBuilder builder = new PdfRendererBuilder();
 
-		// pdf
+		// configure pdf capabilities
 		BuilderConfig.WITH_PDF.configure(builder);
-		// 字体
+		// register fonts if provided
 		WITH_FOOTS.configure(builder);
-		// 配置
+		// apply external configurations
 		for (PdfBuilderConfig builderConfig : config) {
 			builderConfig.configure(builder);
 		}
@@ -247,11 +296,11 @@ public class HtmlRender {
 	}
 
 	/**
-	 * toPng
-	 * 
-	 * @param html    html
-	 * @param outPath outPath
-	 * @throws IOException
+	 * Write rendered HTML as PNG file to disk (single page).
+	 *
+	 * @param html    html content
+	 * @param outPath destination file path
+	 * @throws IOException on IO errors
 	 */
 	public void toPng(String html, String outPath) throws IOException {
 
@@ -262,11 +311,11 @@ public class HtmlRender {
 	}
 
 	/**
-	 * toPng
-	 * 
-	 * @param html html
-	 * @return BufferedImage
-	 * @throws IOException
+	 * Render HTML to a single BufferedImage (PNG-ready).
+	 *
+	 * @param html html content
+	 * @return BufferedImage the rendered image of the first page
+	 * @throws IOException on IO errors
 	 */
 	public BufferedImage toPng(String html) throws IOException {
 
@@ -276,7 +325,7 @@ public class HtmlRender {
 	}
 
 	/**
-	 * fonts eg： .otf .ttf
+	 * Font registration helper: if fontPath is a directory, register all .ttf and .otf files with the renderer builder. This allows using those fonts via CSS @font-family in HTML.
 	 */
 	public final BaseBuilderConfig WITH_FOOTS = (builder) -> {
 		if (null != fontPath) {
@@ -298,9 +347,11 @@ public class HtmlRender {
 
 	/**
 	 * Find elements by ID and return their content area rectangles.
-	 * 
+	 *
+	 * Requires that a previous render has initialized the internal AsRenderer.
+	 *
 	 * @param id The ID of the element to find.
-	 * @return A map of elements to their content area rectangles.
+	 * @return A map of DOM Element to its content Rectangle
 	 */
 	public Map<Element, Rectangle> findById(String id) {
 		if (asRenderer == null) {
@@ -313,10 +364,10 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Find elements by name and return their content area rectangles.
-	 * 
-	 * @param name The name of the element to find.
-	 * @return A map of elements to their content area rectangles.
+	 * Find elements by name attribute and return their content area rectangles.
+	 *
+	 * @param name The value of the name attribute to match.
+	 * @return Map of Element to Rectangle for matched elements
 	 */
 	public Map<Element, Rectangle> findByName(String name) {
 		if (asRenderer == null) {
@@ -328,10 +379,10 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Find elements by CSS class and return their content area rectangles.
-	 * 
-	 * @param cssClass The CSS class of the element to find.
-	 * @return A map of elements to their content area rectangles.
+	 * Find elements by CSS class (class attribute) and return their rectangles.
+	 *
+	 * @param cssClass CSS class string to match
+	 * @return Map of Element to Rectangle for matched elements
 	 */
 	public Map<Element, Rectangle> findByClass(String cssClass) {
 		if (asRenderer == null) {
@@ -343,10 +394,12 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Find elements by tag name and return their content area rectangles.
-	 * 
-	 * @param tagName The tag name of the element to find.
-	 * @return A map of elements to their content area rectangles.
+	 * Find elements by tag name and return their rectangles.
+	 *
+	 * Matches element tag names (case-sensitive as provided by DOM).
+	 *
+	 * @param tagName element tag name to match
+	 * @return Map of Element to Rectangle for matched elements
 	 */
 	public Map<Element, Rectangle> findByTagName(String tagName) {
 		if (asRenderer == null) {
@@ -358,11 +411,11 @@ public class HtmlRender {
 	}
 
 	/**
-	 * Find elements by arbitrary attribute selector and return their content area rectangles.
-	 * 
-	 * @param name  The attribute name.
-	 * @param value The attribute value.
-	 * @return A map of elements to their content area rectangles.
+	 * Find elements by arbitrary attribute name/value pair and return their rectangles.
+	 *
+	 * @param name  attribute name
+	 * @param value attribute value to match
+	 * @return Map of Element to Rectangle for matched elements
 	 */
 	public Map<Element, Rectangle> findBySelector(String name, String value) {
 		if (asRenderer == null) {
@@ -374,249 +427,207 @@ public class HtmlRender {
 	}
 
 	/**
-	 * pageWidth
-	 * 
-	 * @return pageWidth
+	 * pageWidth getter
+	 *
+	 * @return configured page width
 	 */
 	public Float getPageWidth() {
 		return pageWidth;
 	}
 
 	/**
-	 * pageWidth
-	 * 
-	 * @param pageWidth
+	 * pageWidth setter
+	 *
+	 * @param pageWidth page width value in configured units
 	 */
 	public void setPageWidth(Float pageWidth) {
 		this.pageWidth = pageWidth;
 	}
 
 	/**
-	 * pageHeight
-	 * 
-	 * @return pageHeight
+	 * pageHeight getter
+	 *
+	 * @return configured page height
 	 */
 	public Float getPageHeight() {
 		return pageHeight;
 	}
 
 	/**
-	 * pageHeight
-	 * 
-	 * @param pageHeight
+	 * pageHeight setter
+	 *
+	 * @param pageHeight page height value in configured units
 	 */
 	public void setPageHeight(Float pageHeight) {
 		this.pageHeight = pageHeight;
 	}
 
 	/**
-	 * units
-	 * 
-	 * @return units
+	 * units getter
+	 *
+	 * @return units used for page size
 	 */
 	public PageSizeUnits getUnits() {
 		return units;
 	}
 
 	/**
-	 * units
-	 * 
-	 * @param units
+	 * units setter
+	 *
+	 * @param units units to use for page size
 	 */
 	public void setUnits(PageSizeUnits units) {
 		this.units = units;
 	}
 
 	/**
-	 * imageType
-	 * 
-	 * @return imageType
+	 * imageType getter
+	 *
+	 * @return configured BufferedImage type
 	 */
 	public int getImageType() {
 		return imageType;
 	}
 
 	/**
-	 * imageType
-	 * 
-	 * @param imageType
+	 * imageType setter
+	 *
+	 * @param imageType BufferedImage type constant
 	 */
 	public void setImageType(int imageType) {
 		this.imageType = imageType;
 	}
 
 	/**
-	 * scale
-	 * 
-	 * @return scale
+	 * scale getter
+	 *
+	 * @return rendering scale factor
 	 */
 	public double getScale() {
 		return scale;
 	}
 
 	/**
-	 * scale
-	 * 
-	 * @param scale
+	 * scale setter
+	 *
+	 * @param scale rendering scale multiplier
 	 */
 	public void setScale(double scale) {
 		this.scale = scale;
 	}
 
 	/**
-	 * fontPath
-	 * 
-	 * @return fontPath
+	 * fontPath getter
+	 *
+	 * @return font directory path
 	 */
 	public String getFontPath() {
 		return fontPath;
 	}
 
 	/**
-	 * fontPath
-	 * 
-	 * @param fontPath
+	 * fontPath setter
+	 *
+	 * @param fontPath directory that contains font files (.ttf, .otf)
 	 */
 	public void setFontPath(String fontPath) {
 		this.fontPath = fontPath;
 	}
 
 	/**
-	 * addFontDirectory eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
-	 * 
+	 * Convenience alias for setFontPath: register a directory of fonts.
+	 *
 	 * @see setFontPath()
-	 * 
-	 * @param fontPath
+	 * @param fontPath path to font directory
 	 */
 	public void addFontDirectory(String fontPath) {
 		this.fontPath = fontPath;
 	}
 
 	/**
-	 * loggingEnabled
-	 * 
-	 * @return loggingEnabled
+	 * loggingEnabled getter
+	 *
+	 * @return whether OpenHTMLToPDF logging is enabled
 	 */
 	public Boolean getLoggingEnabled() {
 		return loggingEnabled;
 	}
 
 	/**
-	 * loggingEnabled
-	 * 
-	 * @param loggingEnabled
+	 * loggingEnabled setter
+	 *
+	 * @param loggingEnabled enable or disable internal logging
 	 */
 	public void setLoggingEnabled(Boolean loggingEnabled) {
 		this.loggingEnabled = loggingEnabled;
 	}
 
 	/**
-	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * 
-	 * @param useXp
+	 * Configure use of pixel units (px) for layout calculations.
+	 *
+	 * @param useXp true to use pixel dimensions
 	 */
 	public void usePx(boolean usePx) {
 		this.usePx = usePx;
 	}
 
 	/**
-	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * 
-	 * @param useXp
+	 * Shortcut to enable pixel units.
 	 */
 	public void usePx() {
 		this.usePx = true;
 	}
 
 	/**
-	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
-	 * 
-	 * @return
+	 * baseDocumentUri getter
+	 *
+	 * @return base document URI used to resolve relative resources
 	 */
 	public String getBaseDocumentUri() {
 		return baseDocumentUri;
 	}
 
 	/**
-	 * baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
-	 * 
-	 * @param baseDocumentUri
+	 * baseDocumentUri setter
+	 *
+	 * @param baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
 	 */
 	public void setBaseDocumentUri(String baseDocumentUri) {
 		this.baseDocumentUri = baseDocumentUri;
 	}
 
 	/**
-	 * getAsRenderer
-	 * 
-	 * @return AsRenderer
+	 * Expose the underlying AsRenderer instance produced by the last rendering operation.
+	 *
+	 * @return AsRenderer or null if no rendering has occurred yet
 	 */
 	public AsRenderer getAsRenderer() {
 		return asRenderer;
 	}
 
 	/**
-	 * create
-	 * 
-	 * @return HtmlRender
+	 * Static factory helpers for convenience.
 	 */
 	public static HtmlRender create() {
 		return new HtmlRender();
 	}
 
-	/**
-	 * create
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
-	 * @return HtmlRender
-	 */
 	public static HtmlRender create(Float pageWidth, Float pageHeight) {
 		return new HtmlRender(pageWidth, pageHeight);
 	}
-	/**
-	 * create
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
-	 * @param units      units
-	 * @return HtmlRender
-	 */
+
 	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units) {
 		return new HtmlRender(pageWidth, pageHeight, units);
 	}
 
-	/**
-	 * create
-	 * 
-	 * @param imageType {@link BufferedImage imageType}
-	 * @return HtmlRender
-	 */
 	public static HtmlRender create(int imageType) {
 		return new HtmlRender(imageType);
 	}
 
-	/**
-	 * create
-	 * 
-	 * @param imageType imageType
-	 * @param scale     scale
-	 * @return HtmlRender
-	 */
 	public static HtmlRender create(int imageType, double scale) {
 		return new HtmlRender(imageType, scale);
 	}
 
-	/**
-	 * create
-	 * 
-	 * @param pageWidth  pageWidth
-	 * @param pageHeight pageHeight
-	 * @param units      units
-	 * @param imageType  imageType
-	 * @param scale      scale
-	 * @return HtmlRender
-	 */
 	public static HtmlRender create(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
 		return new HtmlRender(pageWidth, pageHeight, units, imageType, scale);
 	}
