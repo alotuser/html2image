@@ -448,7 +448,9 @@ public class HtmlRender {
 	}
 
 	/**
-	 * addFontDirectory
+	 * addFontDirectory eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
+	 * 
+	 * @see setFontPath()
 	 * 
 	 * @param fontPath
 	 */
