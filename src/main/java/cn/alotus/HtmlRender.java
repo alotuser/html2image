@@ -60,6 +60,23 @@ public class HtmlRender {
 		super();
 	}
 
+	/**
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
+	 */
+	public HtmlRender(Float pageWidth, Float pageHeight) {
+		super();
+		setPageHeight(pageHeight);
+		setPageWidth(pageWidth);
+	}
+
+	/**
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
+	 * @param units      units
+	 */
 	public HtmlRender(Float pageWidth, Float pageHeight, PageSizeUnits units) {
 		super();
 		setPageHeight(pageHeight);
@@ -68,17 +85,34 @@ public class HtmlRender {
 		this.units = units;
 	}
 
+	/**
+	 * 
+	 * @param imageType {@link BufferedImage imageType}
+	 */
 	public HtmlRender(int imageType) {
 		super();
 		this.imageType = imageType;
 	}
 
+	/**
+	 * 
+	 * @param imageType {@link BufferedImage imageType}
+	 * @param scale     scale
+	 */
 	public HtmlRender(int imageType, double scale) {
 		super();
 		this.imageType = imageType;
 		this.scale = scale;
 	}
 
+	/**
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
+	 * @param units      units
+	 * @param imageType  {@link BufferedImage imageType}
+	 * @param scale      scale
+	 */
 	public HtmlRender(Float pageWidth, Float pageHeight, PageSizeUnits units, int imageType, double scale) {
 		super();
 		setPageHeight(pageHeight);
@@ -535,6 +569,16 @@ public class HtmlRender {
 	 * 
 	 * @param pageWidth  pageWidth
 	 * @param pageHeight pageHeight
+	 * @return HtmlRender
+	 */
+	public static HtmlRender create(Float pageWidth, Float pageHeight) {
+		return new HtmlRender(pageWidth, pageHeight);
+	}
+	/**
+	 * create
+	 * 
+	 * @param pageWidth  pageWidth
+	 * @param pageHeight pageHeight
 	 * @param units      units
 	 * @return HtmlRender
 	 */
@@ -545,7 +589,7 @@ public class HtmlRender {
 	/**
 	 * create
 	 * 
-	 * @param imageType imageType
+	 * @param imageType {@link BufferedImage imageType}
 	 * @return HtmlRender
 	 */
 	public static HtmlRender create(int imageType) {
