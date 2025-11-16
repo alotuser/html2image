@@ -2,6 +2,8 @@
 
 一个轻量级的 Java 库，可将标准 HTML 标记转换为图像，并生成对应的客户端图像映射。
 
+📖 新维护项目迁移到[https://github.com/alotuser/openhtmltopdf] ,使用Jsoup更加灵活的选择器方式查找html元素对应位置。
+
 ---
 
 ## ✨ 功能特性
