@@ -591,7 +591,7 @@ public class HtmlRender {
 	/**
 	 * Convenience alias for setFontPath: register a directory of fonts. eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
 	 *
-	 * @see #fontPath()
+	 * @see #fontPath(String)
 	 * @param fontPath path to font directory
 	 * @return  HtmlRender
 	 */
@@ -622,7 +622,7 @@ public class HtmlRender {
 	 * loggingEnabled setter
 	 *
 	 * @param loggingEnabled enable or disable internal logging
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender enabledLogging(Boolean loggingEnabled) {
 		this.loggingEnabled = loggingEnabled;
@@ -661,7 +661,7 @@ public class HtmlRender {
 	 * baseDocumentUri setter
 	 *
 	 * @param baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender baseDocumentUri(String baseDocumentUri) {
 		this.baseDocumentUri = baseDocumentUri;
