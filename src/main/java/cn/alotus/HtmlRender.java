@@ -441,7 +441,7 @@ public class HtmlRender {
 	 * pageWidth setter
 	 *
 	 * @param pageWidth page width value in configured units
-	 * @return 
+	 * @return  HtmlRender
 	 */
 	public HtmlRender pageWidth(Float pageWidth) {
 		this.pageWidth = pageWidth;
@@ -469,7 +469,7 @@ public class HtmlRender {
 	 * pageHeight setter
 	 *
 	 * @param pageHeight page height value in configured units
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender pageHeight(Float pageHeight) {
 		this.pageHeight = pageHeight;
@@ -498,7 +498,7 @@ public class HtmlRender {
 	 * units setter
 	 *
 	 * @param units units to use for page size
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender units(PageSizeUnits units) {
 		this.units = units;
@@ -526,7 +526,7 @@ public class HtmlRender {
 	 * imageType setter
 	 *
 	 * @param imageType BufferedImage type constant
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender imageType(int imageType) {
 		this.imageType = imageType;
@@ -554,7 +554,7 @@ public class HtmlRender {
 	 * scale setter
 	 *
 	 * @param scale rendering scale multiplier
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender scale(double scale) {
 		this.scale = scale;
@@ -593,7 +593,7 @@ public class HtmlRender {
 	 *
 	 * @see setFontPath()
 	 * @param fontPath path to font directory
-	 * @return 
+	 * @return  HtmlRender
 	 */
 	public HtmlRender addFontDirectory(String fontPath) {
 		this.fontPath = fontPath;
@@ -632,14 +632,16 @@ public class HtmlRender {
 	 * Configure use of pixel units (px) for layout calculations.
 	 *Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
 	 * @param useXp true to use pixel dimensions
+	 * @return  HtmlRender
 	 */
-	public void usePx(boolean usePx) {
+	public HtmlRender usePx(boolean usePx) {
 		this.usePx = usePx;
+		return this;
 	}
 
 	/**
 	 * Shortcut to enable pixel units. Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * @return 
+	 * @return HtmlRender
 	 */
 	public HtmlRender usePx() {
 		this.usePx = true;
