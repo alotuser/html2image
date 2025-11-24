@@ -40,7 +40,7 @@ public class AsRendererBuilder extends BaseRendererBuilder<AsRendererBuilder, cn
 	/**
 	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
 	 * @param usePixelDimensions
-	 * @return
+	 * @return AsRendererBuilder
 	 */
 	public AsRendererBuilder usePixelDimensions(boolean usePixelDimensions) {
 		state._usePixelDimensions = usePixelDimensions;

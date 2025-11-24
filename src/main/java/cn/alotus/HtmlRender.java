@@ -51,8 +51,8 @@ import cn.alotus.renderer.AsRenderer;
  * - This class aims to keep rendering details encapsulated and expose common flows used in the project.
  *</pre>
  * @author alotus
- * @version 1.0
- * @date 2024-05-15
+ * @version 1.1.2
+ * @since 2024-05-15
  */
 public class HtmlRender {
 
@@ -591,7 +591,7 @@ public class HtmlRender {
 	/**
 	 * Convenience alias for setFontPath: register a directory of fonts. eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
 	 *
-	 * @see setFontPath()
+	 * @see #fontPath()
 	 * @param fontPath path to font directory
 	 * @return  HtmlRender
 	 */
@@ -630,8 +630,8 @@ public class HtmlRender {
 	}
 	/**
 	 * Configure use of pixel units (px) for layout calculations.
-	 *Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
-	 * @param useXp true to use pixel dimensions
+	 * Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
+	 * @param usePx true to use pixel dimensions
 	 * @return  HtmlRender
 	 */
 	public HtmlRender usePx(boolean usePx) {
