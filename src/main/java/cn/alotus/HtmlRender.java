@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,14 +19,8 @@ import javax.swing.text.html.HTML;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Element;
 
-import com.openhtmltopdf.extend.SVGDrawer;
-import com.openhtmltopdf.java2d.api.DefaultPageProcessor;
-import com.openhtmltopdf.latexsupport.LaTeXDOMMutator;
-import com.openhtmltopdf.mathmlsupport.MathMLDrawer;
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder.PageSizeUnits;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder.PdfAConformance;
-import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
 import com.openhtmltopdf.util.XRLog;
 
 import cn.alotus.builder.AsRendererBuilder;
@@ -695,119 +688,119 @@ public class HtmlRender {
 	///-----------------------------------------///
 	/// @Deprecated. @SuppressWarnings("unused")///
 	///-----------------------------------------///
-	@SuppressWarnings("unused")
-	@Deprecated
-	private BufferedImage runRendererSingle(String html, final String filename) throws IOException {
-
-		AsRendererBuilder builder = new AsRendererBuilder();
-
-		builder.withHtmlContent(html, baseDocumentUri);
-
-		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_RGB, 2.0);
-
-		builder.useDefaultPageSize(650, 700, AsRendererBuilder.PageSizeUnits.MM);
-		builder.useEnvironmentFonts(true);
-		// 开发模式下开启可以打印信息
-		builder.useFastMode();
-		builder.testMode(true);
-
-		String FONT_PATH = "D:\\myfonts";
-		builder.useFont(new File(FONT_PATH + "/zitijiaaizaoziyikong.ttf"), "bzff");
-
-		builder.toSinglePage(bufferedImagePageProcessor);
-
-		builder.runFirstPage();
-
-		/*
-		 * Render Single Page Image
-		 */
-		return bufferedImagePageProcessor.getPageImages().get(0);
-
-		// ImageIO.write(image, "PNG", new File(filename));
-
-		/*
-		 * Render Multipage Image Files
-		 */
-		// builder.toPageProcessor(new DefaultPageProcessor(zeroBasedPageNumber -> new FileOutputStream(filename.replace(".png", "_" + zeroBasedPageNumber + ".png")), BufferedImage.TYPE_INT_ARGB, "PNG")).runPaged();
-
-	}
-
-	@Deprecated
-	@SuppressWarnings("unused")
-	private List<BufferedImage> runRendererPaged(String resourcePath, String html) {
-		AsRendererBuilder builder = new AsRendererBuilder();
-		builder.withHtmlContent(html, baseDocumentUri);
-		builder.useFastMode();
-		builder.testMode(true);
-
-		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_RGB, 1.0);
-
-		builder.toPageProcessor(bufferedImagePageProcessor);
-
-		// BuilderConfig.J2D_WITH_FONT.configure(builder);
-
-		try {
-			builder.runPaged();
-		} catch (Exception e) {
-			System.err.println("Failed to render resource (" + resourcePath + ")");
-			e.printStackTrace();
-			return null;
-		}
-
-		return bufferedImagePageProcessor.getPageImages();
-	}
-
-	@Deprecated
-	@SuppressWarnings("unused")
-	private void renderSamplePNG(String html, final String filename) throws IOException {
-		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
-
-			AsRendererBuilder builder = new AsRendererBuilder();
-			builder.useSVGDrawer(svg);
-			builder.useMathMLDrawer(mathMl);
-
-			builder.withHtmlContent(html, baseDocumentUri);
-
-			BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_ARGB, 2.0);
-
-			builder.useDefaultPageSize(150, 130, AsRendererBuilder.PageSizeUnits.MM);
-
-			builder.useEnvironmentFonts(true);
-			// 开发模式下开启可以打印信息
-			builder.useFastMode();
-			builder.testMode(true);
-
-			String FONT_PATH = "D:\\myfonts";
-			builder.useFont(new File(FONT_PATH + "/zitijiaaizaoziyikong.ttf"), "bzff");
-
-			/*
-			 * Render Single Page Image
-			 */
-			builder.toSinglePage(bufferedImagePageProcessor).runFirstPage();
-			BufferedImage image = bufferedImagePageProcessor.getPageImages().get(0);
-
-			ImageIO.write(image, "PNG", new File(filename));
-
-			/*
-			 * Render Multipage Image Files
-			 */
-			builder.toPageProcessor(new DefaultPageProcessor(zeroBasedPageNumber -> new FileOutputStream(filename.replace(".png", "_" + zeroBasedPageNumber + ".png")), BufferedImage.TYPE_INT_ARGB, "PNG")).runPaged();
-
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void renderPDF(String html, PdfAConformance pdfaConformance, OutputStream outputStream) throws IOException {
-		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
-
-			PdfRendererBuilder builder = new PdfRendererBuilder();
-			builder.useSVGDrawer(svg);
-			builder.useMathMLDrawer(mathMl);
-			builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
-			builder.usePdfAConformance(pdfaConformance);
-			builder.withHtmlContent(html, baseDocumentUri);
-			builder.toStream(outputStream);
-			builder.run();
-		}
-	}
+//	@SuppressWarnings("unused")
+//	@Deprecated
+//	private BufferedImage runRendererSingle(String html, final String filename) throws IOException {
+//
+//		AsRendererBuilder builder = new AsRendererBuilder();
+//
+//		builder.withHtmlContent(html, baseDocumentUri);
+//
+//		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_RGB, 2.0);
+//
+//		builder.useDefaultPageSize(650, 700, AsRendererBuilder.PageSizeUnits.MM);
+//		builder.useEnvironmentFonts(true);
+//		// 开发模式下开启可以打印信息
+//		builder.useFastMode();
+//		builder.testMode(true);
+//
+//		String FONT_PATH = "D:\\myfonts";
+//		builder.useFont(new File(FONT_PATH + "/zitijiaaizaoziyikong.ttf"), "bzff");
+//
+//		builder.toSinglePage(bufferedImagePageProcessor);
+//
+//		builder.runFirstPage();
+//
+//		/*
+//		 * Render Single Page Image
+//		 */
+//		return bufferedImagePageProcessor.getPageImages().get(0);
+//
+//		// ImageIO.write(image, "PNG", new File(filename));
+//
+//		/*
+//		 * Render Multipage Image Files
+//		 */
+//		// builder.toPageProcessor(new DefaultPageProcessor(zeroBasedPageNumber -> new FileOutputStream(filename.replace(".png", "_" + zeroBasedPageNumber + ".png")), BufferedImage.TYPE_INT_ARGB, "PNG")).runPaged();
+//
+//	}
+//
+//	@Deprecated
+//	@SuppressWarnings("unused")
+//	private List<BufferedImage> runRendererPaged(String resourcePath, String html) {
+//		AsRendererBuilder builder = new AsRendererBuilder();
+//		builder.withHtmlContent(html, baseDocumentUri);
+//		builder.useFastMode();
+//		builder.testMode(true);
+//
+//		BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_RGB, 1.0);
+//
+//		builder.toPageProcessor(bufferedImagePageProcessor);
+//
+//		// BuilderConfig.J2D_WITH_FONT.configure(builder);
+//
+//		try {
+//			builder.runPaged();
+//		} catch (Exception e) {
+//			System.err.println("Failed to render resource (" + resourcePath + ")");
+//			e.printStackTrace();
+//			return null;
+//		}
+//
+//		return bufferedImagePageProcessor.getPageImages();
+//	}
+//
+//	@Deprecated
+//	@SuppressWarnings("unused")
+//	private void renderSamplePNG(String html, final String filename) throws IOException {
+//		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
+//
+//			AsRendererBuilder builder = new AsRendererBuilder();
+//			builder.useSVGDrawer(svg);
+//			builder.useMathMLDrawer(mathMl);
+//
+//			builder.withHtmlContent(html, baseDocumentUri);
+//
+//			BufferedImagePageProcessor bufferedImagePageProcessor = new BufferedImagePageProcessor(BufferedImage.TYPE_INT_ARGB, 2.0);
+//
+//			builder.useDefaultPageSize(150, 130, AsRendererBuilder.PageSizeUnits.MM);
+//
+//			builder.useEnvironmentFonts(true);
+//			// 开发模式下开启可以打印信息
+//			builder.useFastMode();
+//			builder.testMode(true);
+//
+//			String FONT_PATH = "D:\\myfonts";
+//			builder.useFont(new File(FONT_PATH + "/zitijiaaizaoziyikong.ttf"), "bzff");
+//
+//			/*
+//			 * Render Single Page Image
+//			 */
+//			builder.toSinglePage(bufferedImagePageProcessor).runFirstPage();
+//			BufferedImage image = bufferedImagePageProcessor.getPageImages().get(0);
+//
+//			ImageIO.write(image, "PNG", new File(filename));
+//
+//			/*
+//			 * Render Multipage Image Files
+//			 */
+//			builder.toPageProcessor(new DefaultPageProcessor(zeroBasedPageNumber -> new FileOutputStream(filename.replace(".png", "_" + zeroBasedPageNumber + ".png")), BufferedImage.TYPE_INT_ARGB, "PNG")).runPaged();
+//
+//		}
+//	}
+//
+//	@SuppressWarnings("unused")
+//	private void renderPDF(String html, PdfAConformance pdfaConformance, OutputStream outputStream) throws IOException {
+//		try (SVGDrawer svg = new BatikSVGDrawer(); SVGDrawer mathMl = new MathMLDrawer()) {
+//
+//			PdfRendererBuilder builder = new PdfRendererBuilder();
+//			builder.useSVGDrawer(svg);
+//			builder.useMathMLDrawer(mathMl);
+//			builder.addDOMMutator(LaTeXDOMMutator.INSTANCE);
+//			builder.usePdfAConformance(pdfaConformance);
+//			builder.withHtmlContent(html, baseDocumentUri);
+//			builder.toStream(outputStream);
+//			builder.run();
+//		}
+//	}
 }
