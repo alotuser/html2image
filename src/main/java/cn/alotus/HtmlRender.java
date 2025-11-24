@@ -438,6 +438,17 @@ public class HtmlRender {
 	}
 
 	/**
+	 * pageWidth setter
+	 *
+	 * @param pageWidth page width value in configured units
+	 * @return 
+	 */
+	public HtmlRender pageWidth(Float pageWidth) {
+		this.pageWidth = pageWidth;
+		return this;
+	}
+	
+	/**
 	 * pageHeight getter
 	 *
 	 * @return configured page height
@@ -453,6 +464,16 @@ public class HtmlRender {
 	 */
 	public void setPageHeight(Float pageHeight) {
 		this.pageHeight = pageHeight;
+	}
+	/**
+	 * pageHeight setter
+	 *
+	 * @param pageHeight page height value in configured units
+	 * @return 
+	 */
+	public HtmlRender pageHeight(Float pageHeight) {
+		this.pageHeight = pageHeight;
+		return this;
 	}
 
 	/**
@@ -474,6 +495,17 @@ public class HtmlRender {
 	}
 
 	/**
+	 * units setter
+	 *
+	 * @param units units to use for page size
+	 * @return 
+	 */
+	public HtmlRender units(PageSizeUnits units) {
+		this.units = units;
+		return this;
+	}
+	
+	/**
 	 * imageType getter
 	 *
 	 * @return configured BufferedImage type
@@ -489,6 +521,16 @@ public class HtmlRender {
 	 */
 	public void setImageType(int imageType) {
 		this.imageType = imageType;
+	}
+	/**
+	 * imageType setter
+	 *
+	 * @param imageType BufferedImage type constant
+	 * @return 
+	 */
+	public HtmlRender imageType(int imageType) {
+		this.imageType = imageType;
+		return this;
 	}
 
 	/**
@@ -508,6 +550,16 @@ public class HtmlRender {
 	public void setScale(double scale) {
 		this.scale = scale;
 	}
+	/**
+	 * scale setter
+	 *
+	 * @param scale rendering scale multiplier
+	 * @return 
+	 */
+	public HtmlRender scale(double scale) {
+		this.scale = scale;
+		return this;
+	}
 
 	/**
 	 * fontPath getter
@@ -526,15 +578,26 @@ public class HtmlRender {
 	public void setFontPath(String fontPath) {
 		this.fontPath = fontPath;
 	}
+	/**
+	 * fontPath  eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
+	 *
+	 * @param fontPath directory that contains font files (.ttf, .otf)
+	 */
+	public HtmlRender fontPath(String fontPath) {
+		this.fontPath = fontPath;
+		return this;
+	}
 
 	/**
 	 * Convenience alias for setFontPath: register a directory of fonts. eg: java>AlibabaPuHuiTi.ttf use html> font-family: AlibabaPuHuiTi;
 	 *
 	 * @see setFontPath()
 	 * @param fontPath path to font directory
+	 * @return 
 	 */
-	public void addFontDirectory(String fontPath) {
+	public HtmlRender addFontDirectory(String fontPath) {
 		this.fontPath = fontPath;
+		return this;
 	}
 
 	/**
@@ -556,6 +619,16 @@ public class HtmlRender {
 	}
 
 	/**
+	 * loggingEnabled setter
+	 *
+	 * @param loggingEnabled enable or disable internal logging
+	 * @return 
+	 */
+	public HtmlRender enabledLogging(Boolean loggingEnabled) {
+		this.loggingEnabled = loggingEnabled;
+		return this;
+	}
+	/**
 	 * Configure use of pixel units (px) for layout calculations.
 	 *Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
 	 * @param useXp true to use pixel dimensions
@@ -566,9 +639,11 @@ public class HtmlRender {
 
 	/**
 	 * Shortcut to enable pixel units. Pixel Dimensions is the size parameter of an exponential character image in two-dimensional space, usually represented in two dimensions: length and width, with units of pixels (px). For example, the pixel dimension of a photo may be labeled as "1920 × 1080", indicating that it contains 1920 pixels in the length direction and 1080 pixels in the width direction.
+	 * @return 
 	 */
-	public void usePx() {
+	public HtmlRender usePx() {
 		this.usePx = true;
+		return this;
 	}
 
 	/**
@@ -584,9 +659,11 @@ public class HtmlRender {
 	 * baseDocumentUri setter
 	 *
 	 * @param baseDocumentUri the base document URI to resolve future relative resources (e.g. images)
+	 * @return 
 	 */
-	public void setBaseDocumentUri(String baseDocumentUri) {
+	public HtmlRender baseDocumentUri(String baseDocumentUri) {
 		this.baseDocumentUri = baseDocumentUri;
+		return this;
 	}
 
 	/**
