@@ -65,7 +65,7 @@ try (FileOutputStream outputStream = new FileOutputStream("D:/test.pdf")) {
     <dependency>
         <groupId>com.github.alotuser</groupId>
         <artifactId>html2image</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </dependency>
 </dependencies>
 ```
